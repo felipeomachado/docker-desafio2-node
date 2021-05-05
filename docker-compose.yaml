@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+    desafio2-mysql:
+        container_name: desafio2-mysql
+        image: mysql:5.7
+        volumes: 
+            - ./dbdata:/var/lib/mysql
+            - ./mysql:/docker-entrypoint-initdb.d
+        environment: 
+            - MYSQL_ROOT_PASSWORD=root
+    
+    desafio2-app:
+        container_name: desafio2-app
+        build: ./app
+        depends_on:
+            - desafio2-mysql
+
+    desafio2-nginx:
+        container_name: desafio2-nginx
+        build: ./nginx
+        ports:
+            - 8080:80
+        depends_on:
+            - desafio2-app
